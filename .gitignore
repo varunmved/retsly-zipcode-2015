@@ -2,3 +2,4 @@ venv/
 *.pyc
 .env
 .bash_env
+*.swp
