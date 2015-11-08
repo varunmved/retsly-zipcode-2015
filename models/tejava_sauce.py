@@ -17,17 +17,26 @@ def buildpolygon(latitude, longitude, max_minutes, precision=50):
     returns: list of dicts containing final lat, long. order of points matter
     """
 
-    #TODO: actual code to calculate the polygon. return a hard-coded list for now
-    polygon = TravelPolygon(latitude, longitude, max_minutes, precision)
+    polygon = TravelPolygon()
+    polygon.build(latitude, longitude, max_minutes, precision)
     polygon.fit()
 
     return polygon
 
+def populatepolygon(latlong_dict):
+    """build a travelpolygon given a list of dicts containing the keys 'longitude' and 'latitude'
 
-def polylistings(polygon):
+    latlong_dict -- list of dicts
+    """
+    polygon = TravelPolygon()
+    polygon.populate(latlong_dict)
+    return polygon
+
+
+def polylistings(polygon, offset=0, limit=25):
     """uses the retsly API to return a list of properties that fall within the defined polygon"""
 
-    vendorID = "test_sf"
+    vendorID = "armls"
     resource = "listings"
     token = os.getenv("RETSLY_TOKEN", "notatoken")
 
@@ -45,7 +54,11 @@ def polylistings(polygon):
         params = {
             "access_token": token,
             "poly": polypoints,
-            # "bedrooms[gt]": 0,
+            "sortBy": "id",
+            "order": "asc",
+            "offset": offset,
+            "limit": limit,
+            "bedrooms[gt]": 0,
             # "type": "Residential",
         }
         response = requests.get(url, params=params)

@@ -35,9 +35,20 @@ class Point:
 
 
 class TravelPolygon:
-    def __init__(self, latitude, longitude, max_time, slices):
-        self.slices = slices
+    def __init__(self):
         self.points = []
+        pass
+
+    def populate(self, vertices):
+        """create a polygon from a predefined list, of dicts, of latlongs"""
+        for vertex in vertices:
+            point = Point(0, 0, vertex["longitude"], vertex["latitude"])
+            self.points.append(point)
+
+
+    def build(self, latitude, longitude, max_time, slices):
+        """create a polygon from scratch given a center and max travel time"""
+        self.slices = slices
         self.max_time = max_time * 60   # convert minutes to seconds
         self.centerLat = latitude
         self.centerLong = longitude
@@ -45,6 +56,7 @@ class TravelPolygon:
         for theta in range(0, 360, 360/slices):
             point = Point(r_init, theta, longitude,latitude)
             self.points.append(point)
+
 
     def __str__(self):
         s = ""
@@ -63,7 +75,7 @@ class TravelPolygon:
         alldone = False
         limit = 20
         i = 0
-        tmode = "bicycling"
+        tmode = "driving"
 
         depart = datetime.datetime(2015,11,10,7,0,0)
         while not alldone and i < limit:
@@ -135,7 +147,10 @@ class TravelPolygon:
 
 # Lumo Offices: 37.4256015,-122.1459576
 # zip.Code: 37.788894,-122.4002976
+# phoenix airport: 33.4388326,-112.0262216
+# a
 
-# shape = TravelPolygon(37.788894,-122.4002976, 30, 16)
+# shape = TravelPolygon()
+# shape.build(33.4388326,-112.0262216, 30, 16)
 # shape.fit()
 # print(shape)
