@@ -3,6 +3,7 @@ import requests
 import json
 import numpy
 
+from textblob import TextBlob
 from utils.travelpolygon import TravelPolygon
 
 def buildpolygon(latitude, longitude, max_minutes, precision=50):
@@ -68,6 +69,12 @@ def polylistings(polygon, offset=0, limit=25):
             result = response.json()
             if "status" in result and result["status"] == 200:
                 listings = result["bundle"]
+                for listing in listings:
+                    remarks = listing["publicRemarks"]
+                    blob = TextBlob(remarks)
+                    listing["polarity"] = str(blob.sentiment.polarity)
+                    listing["subjectivity"] = str(blob.sentiment.subjectivity)
+
             data = {
                 "polygon": polygon.vertices(),
                 "listings": listings,
@@ -75,7 +82,6 @@ def polylistings(polygon, offset=0, limit=25):
             }
         else:
             return response.text
-
 
         return data
     except Exception as e:
