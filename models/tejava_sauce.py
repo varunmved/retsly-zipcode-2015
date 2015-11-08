@@ -21,21 +21,6 @@ def buildpolygon(latitude, longitude, max_minutes, precision=50):
     polygon = TravelPolygon(latitude, longitude, max_minutes, precision)
     polygon.fit()
 
-    polygon = [
-        {"longitude": -122.455330, "latitude": 37.748186},
-        {"longitude": -122.462540, "latitude": 37.736512},
-        {"longitude": -122.456017, "latitude": 37.726194},
-        {"longitude": -122.435417, "latitude": 37.713159},
-        {"longitude": -122.414131, "latitude": 37.722392},
-        {"longitude": -122.401428, "latitude": 37.728910},
-        {"longitude": -122.402802, "latitude": 37.743571},
-        {"longitude": -122.418594, "latitude": 37.757959},
-        {"longitude": -122.410011, "latitude": 37.763930},
-        {"longitude": -122.424431, "latitude": 37.770172},
-        {"longitude": -122.430267, "latitude": 37.756058},
-        {"longitude": -122.447433, "latitude": 37.759859},
-        {"longitude": -122.455330, "latitude": 37.748186}]
-
     return polygon
 
 
@@ -50,8 +35,8 @@ def polylistings(polygon):
         # flatten the list of dicts into a list
 
         #list of dicts to list of lists
-        points = [(str(vertex["longitude"]), str(vertex["latitude"])) for vertex in polygon]
-
+        points = [(str(vertex.long), str(vertex.lat)) for vertex in polygon.points]
+        
         # list of lists to list: http://stackoverflow.com/questions/10632839/python-transform-list-of-tuples-in-to-1-flat-list-or-1-matrix
         polypoints = list(sum(points, ()))
         polypoints = ",".join(polypoints)
@@ -71,7 +56,7 @@ def polylistings(polygon):
             if "status" in result and result["status"] == 200:
                 listings = result["bundle"]
             data = {
-                "polygon": polygon,
+                "polygon": polygon.vertices(),
                 "listings": listings,
                 "n_results": len(listings),
             }
