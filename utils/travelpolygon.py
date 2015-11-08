@@ -137,13 +137,12 @@ class TravelPolygon:
                         alldone = alldone and point.done
                 else:
                     print("distance matrix failed")
-                    pdb.set_trace()
                     break
 
 
             except Exception as e:
                 print(e)
-                pdb.set_trace()
+                raise(e)
 
 # Lumo Offices: 37.4256015,-122.1459576
 # zip.Code: 37.788894,-122.4002976
