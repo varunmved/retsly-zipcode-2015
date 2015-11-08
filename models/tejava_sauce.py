@@ -3,6 +3,7 @@ import requests
 import json
 import numpy
 
+from utils.travelpolygon import TravelPolygon
 
 def buildpolygon(latitude, longitude, max_minutes, precision=50):
     """estimate a polygon such that every point within the polygon is within
@@ -17,6 +18,9 @@ def buildpolygon(latitude, longitude, max_minutes, precision=50):
     """
 
     #TODO: actual code to calculate the polygon. return a hard-coded list for now
+    polygon = TravelPolygon(latitude, longitude, max_minutes, precision)
+    polygon.fit()
+
     polygon = [
         {"longitude": -122.455330, "latitude": 37.748186},
         {"longitude": -122.462540, "latitude": 37.736512},
